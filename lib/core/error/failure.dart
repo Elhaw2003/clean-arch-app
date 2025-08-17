@@ -1,7 +1,12 @@
-abstract class Failure {
+import 'package:equatable/equatable.dart';
+
+abstract class Failure extends Equatable{
   final String message;
-  Failure({required this.message});
+  const Failure({required this.message});
+  @override
+  // TODO: implement props
+  List<Object?> get props => [message];
 }
 class ApiFailure extends Failure {
-  ApiFailure({required super.message});
+  const ApiFailure({required super.message});
 }

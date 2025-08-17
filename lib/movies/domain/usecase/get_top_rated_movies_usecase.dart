@@ -4,9 +4,9 @@ import 'package:dartz/dartz.dart';
 import '../../../core/error/failure.dart';
 import '../entities/top_rated_entities.dart';
 
-class GetNowPlayingMoviesUseCase {
+class GetTopRatedMoviesUseCase {
   final BaseMoviesRepository baseMoviesRepository;
-  GetNowPlayingMoviesUseCase({required this.baseMoviesRepository});
+  GetTopRatedMoviesUseCase({required this.baseMoviesRepository});
  Future<Either<Failure,List<TopRatedEntities>>> execute()async{
     return await baseMoviesRepository.getTopRatedMovies();
   }

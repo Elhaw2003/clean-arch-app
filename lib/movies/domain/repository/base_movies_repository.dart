@@ -6,7 +6,7 @@ import 'package:dartz/dartz.dart';
 import '../../../core/error/failure.dart';
 // contract ............
 abstract class BaseMoviesRepository {
-  Future<Either<Failure,List<NowPlayingEntities>>> getNowPlayingMovies();
+  Future<Either<Failure, List<NowPlayingEntities>>> getNowPlayingMovies();
   Future<Either<Failure,List<PopularEntities>>> getPopularMovies();
   Future<Either<Failure,List<TopRatedEntities>>> getTopRatedMovies();
 }
