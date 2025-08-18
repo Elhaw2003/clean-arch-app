@@ -16,13 +16,11 @@ class NowPlayingMovieWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<MovieBloc, MovieStates>(
       builder: (context, state) {
-        print("============================= ${state.nowPlayingMoviesList} ======================");
         switch(state.nowPlayingMoviesRequestState) {
           case RequestState.loading:
             return SizedBox(height: 400.0,
             width: double.infinity,child: Center(child: CircularProgressIndicator()));
           case RequestState.loaded:
-            print("============================= ${state.nowPlayingMoviesList} ======================");
             return FadeIn(
               duration: const Duration(milliseconds: 500),
               child: CarouselSlider(

@@ -9,7 +9,7 @@ class PopularMoviesModel extends PopularEntities{
       genreIds: List<int>.from(json["genre_ids"].map((e) => e)),
       overview: json["overview"],
       title: json["title"],
-      voteAverage: json["vote_average"].toDouble,
+      voteAverage: json["vote_average"],
       releaseDate: json["release_date"],
     );
   }

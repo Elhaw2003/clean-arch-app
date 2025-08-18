@@ -10,24 +10,26 @@ import 'movie_state.dart';
 class MovieBloc extends Bloc<MovieEvent, MovieStates> {
   final GetNowPlayingMoviesUseCase getNowPlayingMoviesUseCase;
   final GetPopularMoviesUseCase getPopularMoviesUseCase;
-  // final GetTopRatedMoviesUseCase getTopRatedMoviesUseCase;
-  MovieBloc({required this.getNowPlayingMoviesUseCase,required this.getPopularMoviesUseCase}) : super(MovieStates()){
+  final GetTopRatedMoviesUseCase getTopRatedMoviesUseCase;
+  MovieBloc({required this.getNowPlayingMoviesUseCase,required this.getPopularMoviesUseCase,required this.getTopRatedMoviesUseCase}) : super(MovieStates()){
     on<GetNowPlayingMoviesEvent>((event, emit) async{
      final result =await getNowPlayingMoviesUseCase.execute();
-     print(result);
      return result.fold(
              (left){
                emit(
-                 MovieStates(
-                     nowPlayingMoviesErrorMessage: left.message,
-                   nowPlayingMoviesRequestState: RequestState.error),
+                 state.copyWith(
+                   nowPlayingMoviesErrorMessage: left.message,
+                   nowPlayingMoviesRequestState: RequestState.error
+                 )
                );
              },
              (right){
                emit(
-                   MovieStates(
+                   state.copyWith(
                        nowPlayingMoviesList: right,
-                       nowPlayingMoviesRequestState: RequestState.loaded));
+                       nowPlayingMoviesRequestState: RequestState.loaded
+                   )
+               );
              }
      );
     });
@@ -37,37 +39,43 @@ class MovieBloc extends Bloc<MovieEvent, MovieStates> {
       return result.fold(
               (left){
             emit(
-              MovieStates(
-                   popularMoviesErrorMessage: left.message,
-                  popularMoviesRequestState: RequestState.error),
+              state.copyWith(
+                  popularMoviesErrorMessage: left.message,
+                  popularMoviesRequestState: RequestState.error
+              ),
             );
           },
               (right){
             emit(
-                MovieStates(
+
+                state.copyWith(
                     popularMoviesList: right,
-                    popularMoviesRequestState: RequestState.loaded));
+                    popularMoviesRequestState: RequestState.loaded
+                ));
           }
       );
     });
-    // on<GetTopRatedMoviesEvent>((event,emit)async{
-    //   final result =await getTopRatedMoviesUseCase.execute();
-    //   print(result);
-    //   return result.fold(
-    //           (left){
-    //         emit(
-    //           MovieStates(
-    //                topRatedMoviesErrorMessage: left.message,
-    //               topRatedMoviesRequestState: RequestState.error),
-    //         );
-    //       },
-    //           (right){
-    //         emit(
-    //             MovieStates(
-    //                 topRatedMoviesList: right,
-    //                 topRatedMoviesRequestState: RequestState.loaded));
-    //       }
-    //   );
-    // });
+    on<GetTopRatedMoviesEvent>((event,emit)async{
+      final result =await getTopRatedMoviesUseCase.execute();
+      print(result);
+      return result.fold(
+              (left){
+            emit(
+              state.copyWith(
+                  topRatedMoviesErrorMessage: left.message,
+                  topRatedMoviesRequestState: RequestState.error
+              )
+            );
+          },
+              (right){
+            emit(
+                state.copyWith(
+                    topRatedMoviesList: right,
+                    topRatedMoviesRequestState: RequestState.loaded
+                )
+            );
+          }
+      );
+    });
   }
 }

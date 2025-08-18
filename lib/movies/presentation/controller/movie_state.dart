@@ -1,5 +1,4 @@
 import 'package:clean_arch_app/core/utilities/request_enum.dart';
-import 'package:clean_arch_app/movies/data/models/now_playing_movies_model.dart';
 import 'package:clean_arch_app/movies/domain/entities/now_playing_entities.dart';
 import 'package:clean_arch_app/movies/domain/entities/popular_entities.dart';
 import 'package:clean_arch_app/movies/domain/entities/top_rated_entities.dart';
@@ -27,7 +26,33 @@ class MovieStates extends Equatable {
     this.topRatedMoviesErrorMessage = "",
 });
 
+  MovieStates copyWith({
+    List<NowPlayingEntities>? nowPlayingMoviesList,
+    List<PopularEntities>? popularMoviesList,
+    List<TopRatedEntities>? topRatedMoviesList,
+    RequestState? nowPlayingMoviesRequestState,
+    RequestState? popularMoviesRequestState,
+    RequestState? topRatedMoviesRequestState,
+    String? nowPlayingMoviesErrorMessage,
+    String? popularMoviesErrorMessage,
+    String? topRatedMoviesErrorMessage,
+  }) {
+    return MovieStates(
+      nowPlayingMoviesList: nowPlayingMoviesList ?? this.nowPlayingMoviesList,
+      popularMoviesList: popularMoviesList ?? this.popularMoviesList,
+      topRatedMoviesList: topRatedMoviesList ?? this.topRatedMoviesList,
+      nowPlayingMoviesRequestState: nowPlayingMoviesRequestState ?? this.nowPlayingMoviesRequestState,
+      popularMoviesRequestState: popularMoviesRequestState ?? this.popularMoviesRequestState,
+      topRatedMoviesRequestState: topRatedMoviesRequestState ?? this.topRatedMoviesRequestState,
+      nowPlayingMoviesErrorMessage: nowPlayingMoviesErrorMessage ?? this.nowPlayingMoviesErrorMessage,
+      popularMoviesErrorMessage: popularMoviesErrorMessage ?? this.popularMoviesErrorMessage,
+      topRatedMoviesErrorMessage: topRatedMoviesErrorMessage ?? this.topRatedMoviesErrorMessage,
+    );
+  }
+
   @override
   // TODO: implement props
-  List<Object?> get props => [nowPlayingMoviesList,nowPlayingMoviesRequestState,nowPlayingMoviesErrorMessage];
+  List<Object?> get props => [
+    nowPlayingMoviesList,nowPlayingMoviesRequestState,nowPlayingMoviesErrorMessage,popularMoviesList,popularMoviesRequestState,popularMoviesErrorMessage,topRatedMoviesList,topRatedMoviesRequestState,topRatedMoviesErrorMessage
+  ];
 }

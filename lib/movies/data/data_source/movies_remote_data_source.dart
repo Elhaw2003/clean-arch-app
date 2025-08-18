@@ -24,7 +24,6 @@ class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource{
 
       final response = await Dio().get("${EndPoints.baseUrl}${EndPoints
           .nowPlayingEndPoint}?api_key=${EndPoints.apiKey}");
-      print("============================= ${response} ======================");
       try{
         if (response.statusCode == 200) {
           // print("============================= ${response.data} ======================");
@@ -32,7 +31,6 @@ class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource{
           ));
         }
         else {
-          print("============================= ${response.data} ======================");
           throw ServerException(errorMessageModel: ErrorMessageModel.fromJson(response.data));
         }
       }catch (e){
@@ -40,32 +38,56 @@ class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource{
       }
   }
   @override
-  Future< List<PopularMoviesModel>> getPopularMovies() async {
-      var response = await Dio().get("${EndPoints.baseUrl}${EndPoints
-          .popularMovieEndPoint}? api_key = ${EndPoints.apiKey}");
-      try{
-        if (response.statusCode == 200) {
-         return List<PopularMoviesModel>.from((response.data["results"] as List).map((e) =>
-              PopularMoviesModel.fromJson(e),
-         ));
-        }
-    else {
-          print("============================= ${response.data} ======================");
-    throw ServerException(errorMessageModel: ErrorMessageModel.fromJson(response.data));      }
+  Future<List<PopularMoviesModel>> getPopularMovies() async {
+    try {
+      final response = await Dio().get(
+        "${EndPoints.baseUrl}${EndPoints.popularMovieEndPoint}?api_key=${EndPoints.apiKey}",
+      );
+
+      if (response.statusCode == 200) {
+        return List<PopularMoviesModel>.from(
+          (response.data["results"] as List).map(
+                (e) => PopularMoviesModel.fromJson(e),
+          ),
+        );
+      } else {
+        throw ServerException(
+          errorMessageModel: ErrorMessageModel.fromJson(response.data),
+        );
       }
-      catch (e){
-        throw ApiFailure(message: "hgjffhgfgdhgdjghkj");
-      }
+    } on DioException catch (e) {
+      print("DioException: ${e.message}");
+      print("Response: ${e.response?.data}");
+      throw ServerException(
+        errorMessageModel: ErrorMessageModel(
+          statusMessage: e.response?.statusMessage ?? "Dio Error",
+          statusCode: e.response?.statusCode ?? 500,
+          success: false,
+        ),
+      );
+    } catch (e) {
+      print("Unexpected error: $e");
+      throw ServerException(
+        errorMessageModel: ErrorMessageModel(
+          statusMessage: e.toString(),
+          statusCode: 500,
+          success: false,
+        ),
+      );
+    }
   }
+
 
   @override
   Future< List<TopRatedMoviesModel>> getTopRatedMovies() async {
       var response = await Dio().get("${EndPoints.baseUrl}${EndPoints
           .topRatedMovieEndPoint}?api_key=${EndPoints.apiKey}");
       if (response.statusCode == 200) {
-        List<TopRatedMoviesModel> list = response.data["results"].map((e) =>
-            TopRatedMoviesModel.fromJson(e)).toList();
-        return list;
+        return List<TopRatedMoviesModel>.from(
+          (response.data["results"] as List).map(
+                (e) => TopRatedMoviesModel.fromJson(e),
+          ),
+        );
       }
       else {
         throw ServerException(errorMessageModel: ErrorMessageModel.fromJson(response.data));

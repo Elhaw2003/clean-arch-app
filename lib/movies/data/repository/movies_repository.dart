@@ -5,6 +5,7 @@ import 'package:clean_arch_app/movies/domain/entities/popular_entities.dart';
 import 'package:clean_arch_app/movies/domain/entities/top_rated_entities.dart';
 import 'package:clean_arch_app/movies/domain/repository/base_movies_repository.dart';
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 
 import '../../../core/error/exception.dart';
 
@@ -18,7 +19,7 @@ class MoviesRepository extends BaseMoviesRepository {
       final result = await baseMoviesRemoteDataSource.getNowPlayingMovies();
       return Right(result);
     } on ServerException catch (e) {
-      return Left(ApiFailure(message: e.errorMessageModel.statusMessage));
+      return Left(ApiFailure(message: e.errorMessageModel.statusMessage?? "Unknown Error"));
     }
   }
 
@@ -26,10 +27,17 @@ class MoviesRepository extends BaseMoviesRepository {
   Future<Either<Failure, List<PopularEntities>>> getPopularMovies() async {
     try {
       final result = await baseMoviesRemoteDataSource.getPopularMovies();
+      print("============================= $result ======================");
       return Right(result);
-    } on ServerException catch (e) {
-      return Left(ApiFailure(message: e.errorMessageModel.statusMessage));
+    }on DioException catch (e) {
+      print("Status code: ${e.response?.statusCode}");
+      print("Response data: ${e.response?.data}");
+      return Left(ApiFailure( message: e.response?.data.toString() ?? "Unknown Error"));
     }
+    on ServerException catch (e) {
+  print("API Error: ${e.errorMessageModel.statusMessage?? "Unknown Error"}");
+  return Left(ApiFailure(message: e.errorMessageModel.statusMessage?? "Unknown Error"));
+  }
   }
 
   @override
@@ -38,7 +46,7 @@ class MoviesRepository extends BaseMoviesRepository {
       final result = await baseMoviesRemoteDataSource.getTopRatedMovies();
       return Right(result);
     } on ServerException catch (e) {
-      return Left(ApiFailure(message: e.errorMessageModel.statusMessage));
+      return Left(ApiFailure(message: e.errorMessageModel.statusMessage?? "Unknown Error"));
     }
   }
 }

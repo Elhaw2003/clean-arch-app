@@ -12,12 +12,12 @@ class ServiceLocator {
   void init(){
     /// MOVIE BLOC
 
-    sl.registerFactory(() => MovieBloc(getNowPlayingMoviesUseCase: sl(), getPopularMoviesUseCase: sl()));
+    sl.registerFactory(() => MovieBloc(getNowPlayingMoviesUseCase: sl(), getPopularMoviesUseCase: sl(),getTopRatedMoviesUseCase: sl()),);
 
     /// MOVIE USE CASE
     sl.registerLazySingleton(()=> GetNowPlayingMoviesUseCase(baseMoviesRepository: sl()),);
     sl.registerLazySingleton(()=> GetPopularMoviesUseCase(baseMoviesRepository: sl()),);
-    // sl.registerLazySingleton(()=> GetTopRatedMoviesUseCase(baseMoviesRepository: sl()),);
+    sl.registerLazySingleton(()=> GetTopRatedMoviesUseCase(baseMoviesRepository: sl()),);
     /// MOVIE REPOSITORY
     sl.registerLazySingleton<BaseMoviesRepository>(() => MoviesRepository(baseMoviesRemoteDataSource: sl()),);
     /// MOVIE DATASOURCE
