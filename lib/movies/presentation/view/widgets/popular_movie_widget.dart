@@ -15,55 +15,56 @@ class PopularMovieWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MovieBloc, MovieStates>(
-      builder: (context, state) {
-        switch(state.popularMoviesRequestState) {
-          case RequestState.loading:
-            return const Center(child: CircularProgressIndicator());
-          case RequestState.loaded:
-            return Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.fromLTRB(16.0, 24.0, 16.0, 8.0),
+    return Column(
+      children: [
+        Container(
+          margin: const EdgeInsets.fromLTRB(16.0, 24.0, 16.0, 8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Popular",
+                style: GoogleFonts.poppins(
+                  fontSize: 19,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
+                  letterSpacing: 0.15,
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  /// TODO : NAVIGATION TO POPULAR SCREEN
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
+                    children: const [
                       Text(
-                        "Popular",
-                        style: GoogleFonts.poppins(
-                          fontSize: 19,
-                          fontWeight: FontWeight.w500,
+                        'See More',
+                        style: TextStyle(
                           color: Colors.white,
-                          letterSpacing: 0.15,
                         ),
                       ),
-                      InkWell(
-                        onTap: () {
-                          /// TODO : NAVIGATION TO POPULAR SCREEN
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: const [
-                              Text(
-                                'See More',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                ),
-                              ),
-                              Icon(
-                                Icons.arrow_forward_ios,
-                                color: Colors.white,
-                                size: 16.0,
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        color: Colors.white,
+                        size: 16.0,
+                      )
                     ],
                   ),
                 ),
-                FadeIn(
+              ),
+            ],
+          ),
+        ),
+        BlocBuilder<MovieBloc, MovieStates>(
+          buildWhen: (previous, current) => previous.popularMoviesRequestState != current.popularMoviesRequestState,
+          builder: (context, state) {
+            switch(state.popularMoviesRequestState) {
+              case RequestState.loading:
+                return const Center(child: CircularProgressIndicator());
+              case RequestState.loaded:
+                return FadeIn(
                   duration: const Duration(milliseconds: 500),
                   child: SizedBox(
                     height: 170.0,
@@ -108,13 +109,13 @@ class PopularMovieWidget extends StatelessWidget {
                       },
                     ),
                   ),
-                )
-              ],
-            );
-          case RequestState.error:
-            return Center(child: Text(state.popularMoviesErrorMessage));
-        }
-      },
+                );
+              case RequestState.error:
+                return Center(child: Text(state.popularMoviesErrorMessage));
+            }
+          },
+        ),
+      ],
     );
   }
 }

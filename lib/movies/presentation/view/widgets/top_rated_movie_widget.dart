@@ -15,60 +15,61 @@ class TopRatedMovieWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MovieBloc, MovieStates>(
-      builder: (context, state) {
-        switch (state.topRatedMoviesRequestState) {
-          case RequestState.loading:
-            return const Center(child: CircularProgressIndicator());
-          case RequestState.loaded:
-            return Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.fromLTRB(
-                    16.0,
-                    24.0,
-                    16.0,
-                    8.0,
-                  ),
+    return Column(
+      children: [
+        Container(
+          margin: const EdgeInsets.fromLTRB(
+            16.0,
+            24.0,
+            16.0,
+            8.0,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Top Rated",
+                style: GoogleFonts.poppins(
+                  fontSize: 19,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 0.15,
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  /// TODO : NAVIGATION TO Top Rated Movies Screen
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
+                    children: const [
                       Text(
-                        "Top Rated",
-                        style: GoogleFonts.poppins(
-                          fontSize: 19,
+                        'See More',
+                        style: TextStyle(
                           color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 0.15,
                         ),
                       ),
-                      InkWell(
-                        onTap: () {
-                          /// TODO : NAVIGATION TO Top Rated Movies Screen
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: const [
-                              Text(
-                                'See More',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                ),
-                              ),
-                              Icon(
-                                Icons.arrow_forward_ios,
-                                size: 16.0,
-                                color: Colors.white,
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        size: 16.0,
+                        color: Colors.white,
+                      )
                     ],
                   ),
                 ),
-                FadeIn(
+              ),
+            ],
+          ),
+        ),
+        BlocBuilder<MovieBloc, MovieStates>(
+          buildWhen: (previous, current) => previous.topRatedMoviesRequestState != current.topRatedMoviesRequestState,
+          builder: (context, state) {
+            switch (state.topRatedMoviesRequestState) {
+              case RequestState.loading:
+                return const Center(child: CircularProgressIndicator());
+              case RequestState.loaded:
+                return FadeIn(
                   duration: const Duration(milliseconds: 500),
                   child: SizedBox(
                     height: 170.0,
@@ -114,13 +115,13 @@ class TopRatedMovieWidget extends StatelessWidget {
                       },
                     ),
                   ),
-                )
-              ],
-            );
-          case RequestState.error:
-            return Text(state.topRatedMoviesErrorMessage);
-        }
-      },
+                );
+              case RequestState.error:
+                return Text(state.topRatedMoviesErrorMessage);
+            }
+          },
+        ),
+      ],
     );
   }
 }

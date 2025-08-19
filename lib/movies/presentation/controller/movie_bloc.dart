@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:clean_arch_app/core/base_usecase/base_usecase.dart';
 import 'package:clean_arch_app/core/utilities/request_enum.dart';
 import 'package:clean_arch_app/movies/domain/usecase/get_now_playing_movies_usecase.dart';
 import 'package:clean_arch_app/movies/domain/usecase/get_popular_movies_usecase.dart';
@@ -13,7 +14,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieStates> {
   final GetTopRatedMoviesUseCase getTopRatedMoviesUseCase;
   MovieBloc({required this.getNowPlayingMoviesUseCase,required this.getPopularMoviesUseCase,required this.getTopRatedMoviesUseCase}) : super(MovieStates()){
     on<GetNowPlayingMoviesEvent>((event, emit) async{
-     final result =await getNowPlayingMoviesUseCase.execute();
+     final result =await getNowPlayingMoviesUseCase(const NoParameters());
      return result.fold(
              (left){
                emit(
@@ -34,7 +35,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieStates> {
      );
     });
     on<GetPopularMoviesEvent>((event,emit)async{
-      final result =await getPopularMoviesUseCase.execute();
+      final result =await getPopularMoviesUseCase(const NoParameters());
       print(result);
       return result.fold(
               (left){
@@ -56,7 +57,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieStates> {
       );
     });
     on<GetTopRatedMoviesEvent>((event,emit)async{
-      final result =await getTopRatedMoviesUseCase.execute();
+      final result =await getTopRatedMoviesUseCase(const NoParameters());
       print(result);
       return result.fold(
               (left){
