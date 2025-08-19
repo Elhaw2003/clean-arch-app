@@ -3,8 +3,10 @@ import 'package:clean_arch_app/movies/data/data_source/movies_remote_data_source
 import 'package:clean_arch_app/movies/domain/entities/movie_details_entities.dart';
 import 'package:clean_arch_app/movies/domain/entities/now_playing_entities.dart';
 import 'package:clean_arch_app/movies/domain/entities/popular_entities.dart';
+import 'package:clean_arch_app/movies/domain/entities/recommendation_movie_entities.dart';
 import 'package:clean_arch_app/movies/domain/entities/top_rated_entities.dart';
 import 'package:clean_arch_app/movies/domain/repository/base_movies_repository.dart';
+import 'package:clean_arch_app/movies/domain/usecase/get_recommendation_movies_usecase.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
@@ -56,6 +58,16 @@ class MoviesRepository extends BaseMoviesRepository {
   Future<Either<Failure, MovieDetailsEntities>> getMovieDetails(MovieDetailsParam movieDetailsParam) async{
     try {
       final result = await baseMoviesRemoteDataSource.getDetailsMovies(movieDetailsParam);
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ApiFailure(message: e.errorMessageModel.statusMessage?? "Unknown Error"));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<RecommendationMovieEntities>>> getRecommendationMovies(RecommendationMovieParam recommendationMovieParam) async{
+    try {
+      final result = await baseMoviesRemoteDataSource.getRecommendationMovies(recommendationMovieParam);
       return Right(result);
     } on ServerException catch (e) {
       return Left(ApiFailure(message: e.errorMessageModel.statusMessage?? "Unknown Error"));

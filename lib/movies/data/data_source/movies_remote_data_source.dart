@@ -2,8 +2,9 @@ import 'package:clean_arch_app/core/utilities/app_texts.dart';
 import 'package:clean_arch_app/core/utilities/end_points.dart';
 import 'package:clean_arch_app/movies/data/models/movie_detail_model.dart';
 import 'package:clean_arch_app/movies/data/models/now_playing_movies_model.dart';
+import 'package:clean_arch_app/movies/data/models/recommendation_movie_model.dart';
 import 'package:clean_arch_app/movies/domain/usecase/get_details_movies_usecase.dart';
-import 'package:dartz/dartz.dart';
+import 'package:clean_arch_app/movies/domain/usecase/get_recommendation_movies_usecase.dart';
 import 'package:dio/dio.dart';
 
 import '../../../core/error/error_message_model.dart';
@@ -19,6 +20,7 @@ abstract class BaseMoviesRemoteDataSource {
   Future<List<PopularMoviesModel>> getPopularMovies();
   Future<List<TopRatedMoviesModel>> getTopRatedMovies();
   Future<MovieDetailModel> getDetailsMovies(MovieDetailsParam movieDetailsParam);
+  Future<List<RecommendationMovieModel>> getRecommendationMovies(RecommendationMovieParam recommendationMovieParam);
 
 }
 class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource{
@@ -106,6 +108,23 @@ class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource{
     else {
       throw ServerException(errorMessageModel: ErrorMessageModel.fromJson(response.data));
     }
+  }
+
+  @override
+  Future<List<RecommendationMovieModel>> getRecommendationMovies(RecommendationMovieParam recommendationMovieParam) async{
+    https://api.themoviedb.org/3/movie/755898/recommendations?api_key = bb7c08e5e4225c88068f69f9435fd049
+    var response = await Dio().get("${EndPoints.baseUrl}/movie/${recommendationMovieParam.id}/recommendations?api_key=${EndPoints.apiKey}");
+    if (response.statusCode == 200) {
+      return List<RecommendationMovieModel>.from(
+        (response.data["results"] as List).map(
+              (e) => RecommendationMovieModel.fromJson(e),
+        ),
+      );
+    }
+    else {
+      throw ServerException(errorMessageModel: ErrorMessageModel.fromJson(response.data));
+    }
+
   }
 
 }
