@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clean_arch_app/core/utilities/constants.dart';
-import 'package:clean_arch_app/movies/presentation/controller/movie_state.dart';
+import 'package:clean_arch_app/movies/presentation/controller/movie/movie_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_fadein/flutter_fadein.dart';
@@ -8,7 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../../core/utilities/request_enum.dart';
-import '../../controller/movie_bloc.dart';
+import '../../controller/movie/movie_bloc.dart';
 
 class TopRatedMovieWidget extends StatelessWidget {
   const TopRatedMovieWidget({super.key});

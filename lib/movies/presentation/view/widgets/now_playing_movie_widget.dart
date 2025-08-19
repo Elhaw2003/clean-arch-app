@@ -6,8 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_fadein/flutter_fadein.dart';
 
 import '../../../../core/utilities/request_enum.dart';
-import '../../controller/movie_bloc.dart';
-import '../../controller/movie_state.dart';
+import '../../controller/movie/movie_bloc.dart';
+import '../../controller/movie/movie_state.dart';
 
 class NowPlayingMovieWidget extends StatelessWidget {
   const NowPlayingMovieWidget({super.key});
