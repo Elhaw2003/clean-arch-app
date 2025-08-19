@@ -4,4 +4,5 @@ class EndPoints{
   static const String nowPlayingEndPoint = "/movie/now_playing";
   static const String popularMovieEndPoint = "/movie/popular";
   static const String topRatedMovieEndPoint = "/movie/top_rated";
+  static const String detailsMovieEndPoint = "/movie";
 }

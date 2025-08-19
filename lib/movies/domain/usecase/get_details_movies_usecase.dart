@@ -10,7 +10,7 @@ class GetDetailsMoviesUseCase extends BaseUseCase<MovieDetailsEntities,MovieDeta
   GetDetailsMoviesUseCase({required this.baseMoviesRepository});
   @override
   Future<Either<Failure, MovieDetailsEntities>> call(MovieDetailsParam movieDetailsParam) async{
-    return await baseMoviesRepository.getMovieDetails(id);
+    return await baseMoviesRepository.getMovieDetails(movieDetailsParam);
   }
 }
 class MovieDetailsParam extends Equatable{
